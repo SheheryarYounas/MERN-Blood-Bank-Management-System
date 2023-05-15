@@ -51,7 +51,7 @@ let login = (req, res) => {
         {
             if (donor.password === password)
             {
-                let token = jwt.sign({email: email}, secretKey, {expiresIn: '1h'})
+                let token = jwt.sign({email: email, role: 'Donor'}, secretKey, {expiresIn: '1h'})
                 res.status(200).send({message: "Login Successful", token: token})
             }
 
@@ -73,7 +73,20 @@ let login = (req, res) => {
 
 }
 
+let retrieveAllDonors = (req, res) => {
+    console.log("Retrieve All Donors method in Donor Controller called")
+
+    Donor.find()
+    .then((donors) => {
+        res.status(200).send({message: "All Donors retrieved successfully!", donors: donors})
+    })
+    .catch((err) => {
+        res.status(400).send({message: "Error occurred while retrieving all donors", error: err})
+    })
+}
+
 module.exports = {
     signup,
-    login
+    login,
+    retrieveAllDonors
 }
