@@ -33,6 +33,7 @@ const isAuthorized = (req, res, next) => {
 router.post('/signup', AdminController.signup)
 router.post('/login', AdminController.login)
 router.put('/updateDonor', isAuthorized, AdminController.updateDonor)
+router.delete('/deleteDonor', isAuthorized, AdminController.deleteDonor)
 
 
 

@@ -97,8 +97,24 @@ let updateDonor = (req, res) => {
     })
 }
 
+let deleteDonor = (req, res) => {
+    Donor.findOneAndDelete({email: req.body.email})
+    .then((donor) => {
+        if (!donor)
+        {
+            return res.status(404).send({message: "No donor account exists with this email"})
+        }
+
+        else
+        {
+            res.status(200).send({message: "Donor account deleted successfully!", donor: donor})
+        }
+    })
+}
+
 module.exports = {
     signup,
     login,
-    updateDonor
+    updateDonor,
+    deleteDonor
 }
