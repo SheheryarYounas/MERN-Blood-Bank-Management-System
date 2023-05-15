@@ -1,5 +1,6 @@
 const Donor = require('../Models/Donor')
 const mongoose = require('mongoose')
+const jwt = require('jsonwebtoken')
 
 let signup = (req, res) => {
     console.log("Sign Up method in Donor Controller called")
@@ -44,9 +45,35 @@ let login = (req, res) => {
     let email = req.body.email
     let password = req.body.password
     let secretKey = process.env.SECRET_KEY
+    Donor.findOne({email: email})
+    .then((donor) => {
+        if (donor)
+        {
+            if (donor.password === password)
+            {
+                let token = jwt.sign({email: email}, secretKey, {expiresIn: '1h'})
+                res.status(200).send({message: "Login Successful", token: token})
+            }
+
+            else
+            {
+                res.status(401).send({message: "The password is incorrect"})
+            }
+        }
+
+        else
+        {
+            res.status(404).send({message: "No Donor Account exists with this email"})
+        }
+        
+    })
+    .catch((err) => {
+        res.status(404).send({message: "An error occurred during login", error: err.message})
+    })
 
 }
 
 module.exports = {
-    signup
+    signup,
+    login
 }
