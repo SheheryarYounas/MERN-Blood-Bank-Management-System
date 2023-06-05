@@ -37,6 +37,11 @@ const SignupDonor = () => {
                 alert("Donor Account created successfully!")
                 setStatus(true)
             }
+
+            else
+            {
+                alert("Error occurred while creating Donor Account. Account may already exist")
+            }
         }
 
         catch (error) {
@@ -45,7 +50,7 @@ const SignupDonor = () => {
     }
 
     const handleNext = () => {
-        window.location.href = '/login'
+        window.location.href = '/donor/login'
     }
 
     const handleBack = () => {

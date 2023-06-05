@@ -76,6 +76,7 @@ let login = (req, res) => {
 //For update donor route, I will assume that the frontend will pass on an updated donor object. Email will not be allowed to be updated as it acts as the primary key you can say
 let updateDonor = (req, res) => {
 
+    console.log("Update Donor method in Admin Controller called")
     const updatedDonor = {
         name: req.body.name,
         CNIC: req.body.CNIC,
@@ -88,15 +89,21 @@ let updateDonor = (req, res) => {
 
     Donor.findOneAndUpdate({email: req.body.email}, updatedDonor, {new: true})
     .then((donor) => {
+
         if (!donor)
         {
+            console.log("No donor account exists with this email")
             return res.status(404).send({message: "No donor account exists with this email"})
         }
 
         else
         {
+            console.log("Donor account updated successfully!")
             res.status(200).send({message: "Donor account updated successfully!", donor: donor})
         }
+    })
+    .catch((err) => {
+        console.log("Error occurred while updating donor account", err.message)
     })
 }
 

@@ -78,14 +78,7 @@ const UpdateUser = () => {
         event.preventDefault();
         const token = localStorage.getItem('token')
 
-        const updatedDonor = {
-            name,
-            CNIC,
-            phone,
-            email,
-            city,
-            bloodGroup
-        }
+        
 
         try {
             const response = await fetch('http://localhost:4000/admin/updateDonor', {
@@ -94,7 +87,15 @@ const UpdateUser = () => {
                     'Content-Type': 'application/json',
                     'Authorization': `${token}`
                 },
-                body: JSON.stringify(updatedDonor)
+                body: JSON.stringify({
+                    name: name,
+                    CNIC: CNIC,
+                    phoneNumber: phone,
+                    email: selectedDonor.email,
+                    city: city,
+                    bloodGroup: bloodGroup
+
+                })
 
             })
 
@@ -202,27 +203,23 @@ const UpdateUser = () => {
                     <h2>Update User</h2>
                     <form>
                         <div class="user-box">
-                        <input type="text" placeholder="Name" value={selectedDonor.name} onChange={(event) => setName(event.target.value)} />
+                        <input type="text" placeholder="Name" value={name} onChange={(event) => setName(event.target.value)} />
                         </div>
 
                         <div class="user-box">
-                        <input type="text" placeholder="CNIC" pattern="\d{5}-\d{7}-\d" value={selectedDonor.CNIC} onChange={(event) => setCNIC(event.target.value)} />
+                        <input type="text" placeholder="CNIC" pattern="\d{5}-\d{7}-\d" value={CNIC} onChange={(event) => setCNIC(event.target.value)} />
                         </div>
 
                         <div class="user-box">
-                        <input type="text" placeholder="Phone Number (11-Digit)" value={selectedDonor.phoneNumber} pattern="^\d{11}$" onChange={(event) => setPhoneNumber(event.target.value)} />
+                        <input type="text" placeholder="Phone Number (11-Digit)" value={phone} pattern="^\d{11}$" onChange={(event) => setPhoneNumber(event.target.value)} />
                         </div>
 
                         <div class="user-box">
-                        <input type="email" placeholder="Email" value={selectedDonor.email} onChange={(event) => setEmail(event.target.value)} />
+                        <input type="text" placeholder="City" value={city} onChange={(event) => setCity(event.target.value)} />
                         </div>
 
                         <div class="user-box">
-                        <input type="text" placeholder="City" value={selectedDonor.city} onChange={(event) => setCity(event.target.value)} />
-                        </div>
-
-                        <div class="user-box">
-                        <input type="text" placeholder="Blood Group" value={selectedDonor.bloodGroup} onChange={(event) => setBloodGroup(event.target.value)} />
+                        <input type="text" placeholder="Blood Group" value={bloodGroup} onChange={(event) => setBloodGroup(event.target.value)} />
                         </div>
                         <button onClick={handleUpdate}>Update</button>
                     </form>
