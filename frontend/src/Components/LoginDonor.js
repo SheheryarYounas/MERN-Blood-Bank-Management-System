@@ -67,7 +67,7 @@ const Login = () => {
                 <div class="user-box">
                 <input type="password" placeholder="Enter Password" value={password} onChange={(event) => setPassword(event.target.value)} />
                 </div>
-                
+
                 <button type="submit" onClick={handleLogin}>Login</button>
                 <button type="submit" onClick={handleSignup}>Signup</button>
             </form>
