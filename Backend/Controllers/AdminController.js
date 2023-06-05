@@ -10,13 +10,16 @@ let signup = (req, res) => { //This will not be implemented in frontend. It is h
 
         if (existingDonor)
         {
+            console.log("Already exists")
             return res.status(400).send({message: "Administrator Account already exists with this email!"})
         }
+
+        console.log("Hello!")
 
         let admin = new Admin({
             name: req.body.name,
             CNIC: req.body.CNIC,
-            phoneNumber: req.body.phoneNumber,
+            phoneNumber: req.body.phone,
             email: req.body.email,
             password: req.body.password,
         })
@@ -49,7 +52,7 @@ let login = (req, res) => {
             if (admin.password === password)
             {
                 let token = jwt.sign({email: email, role: 'Admin'}, secretKey, {expiresIn: '1h'}) //the email is now included in the token as well as the role since login is successful
-                res.status(200).send({message: "Login Successful", token: token}) 
+                res.status(200).send({message: "Login Successful", token: token, admin: admin}) 
             }
 
             else
@@ -112,9 +115,23 @@ let deleteDonor = (req, res) => {
     })
 }
 
+let retrieveAllDonors = (req, res) => {
+    console.log("Retrieve All Donors method in Admin Controller called")
+
+    Donor.find()
+    .then((donors) => {
+        console.log("Found em")
+        res.status(200).send({message: "All Donors retrieved successfully!", donors: donors})
+    })
+    .catch((err) => {
+        res.status(400).send({message: "Error occurred while retrieving all donors", error: err})
+    })
+}
+
 module.exports = {
     signup,
     login,
     updateDonor,
-    deleteDonor
+    deleteDonor,
+    retrieveAllDonors
 }

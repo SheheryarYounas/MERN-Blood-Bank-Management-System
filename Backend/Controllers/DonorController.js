@@ -4,10 +4,9 @@ const jwt = require('jsonwebtoken')
 
 let signup = (req, res) => {
     console.log("Sign Up method in Donor Controller called")
-
     Donor.findOne({email: req.body.email}) //First, I will check if the email already exists. If it does, I will not create the account
     .then((existingDonor) => {
-
+        
         if (existingDonor)
         {
             return res.status(400).send({message: "Donor Account already exists with this email!"})
@@ -16,7 +15,7 @@ let signup = (req, res) => {
         let donor = new Donor({
             name: req.body.name,
             CNIC: req.body.CNIC,
-            phoneNumber: req.body.phoneNumber,
+            phoneNumber: req.body.phone,
             email: req.body.email,
             password: req.body.password,
             city: req.body.city,
@@ -27,6 +26,7 @@ let signup = (req, res) => {
         donor.save()
         .then((donor) => {
             res.status(200).send({message: "Donor Account created successfully!", donor: donor})
+            console.log("Donor Account created successfully!")
         })
         .catch((err) => {
             res.status(400).send({message: "Error occurred while creating Donor Account", error: err})
@@ -51,8 +51,9 @@ let login = (req, res) => {
         {
             if (donor.password === password)
             {
+                console.log("Login Successful")
                 let token = jwt.sign({email: email, role: 'Donor'}, secretKey, {expiresIn: '1h'})
-                res.status(200).send({message: "Login Successful", token: token})
+                res.status(200).send({message: "Login Successful", token: token, donor: donor})
             }
 
             else
