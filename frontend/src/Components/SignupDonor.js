@@ -53,26 +53,33 @@ const SignupDonor = () => {
     }
 
     return (
-        <div>
-            <h1>Signup</h1>
+        <div class="login-box">
+            <h2>Donor Signup</h2>
             <form>
-                <label>Name</label>
+                
+                <div class="user-box">
                 <input type="text" placeholder="Enter Name" value={name} onChange={(event) => setName(event.target.value)}/>
-
-                <label>CNIC</label>
+                </div>
+                
+                <div class="user-box">
                 <input type="text" placeholder="Enter CNIC in appropriate format" pattern="\d{5}-\d{7}-\d" value={CNIC} onChange={(event) => setCnic(event.target.value)}/>
-
-                <label>Phone Number</label>
-                <input type="text" placeholder="Enter Phone Number" value={phone} onChange={(event) => setPhone(event.target.value)}/>
-
-                <label>Email</label>
+                </div>
+                
+                <div class="user-box">
+                <input type="text" placeholder="Enter Phone Number (11-Digit)" value={phone} pattern="^\d{11}$" onChange={(event) => setPhone(event.target.value)}/>
+                </div>
+                
+                <div class="user-box">
                 <input type="email" placeholder="Enter Email" value={email} onChange={(event) => setEmail(event.target.value)}/>
-
-                <label>Password</label>
+                </div>
+                
+                <div class="user-box">
                 <input type="password" placeholder="Enter Password" value={password} onChange={(event) => setPassword(event.target.value)}/>
-
-                <label>City</label>
+                </div>
+                
+                <div class="user-box">
                 <input type="text" placeholder="Enter City" value={city} onChange={(event) => setCity(event.target.value)}/>
+                </div>
 
                 <button type="submit" onClick={handleSignup}>Signup</button>
             </form>

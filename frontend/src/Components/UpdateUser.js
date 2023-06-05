@@ -4,6 +4,14 @@ import { useState, useEffect } from 'react';
 const UpdateUser = () => {
     const [donors, setDonors] = useState([]);
     const [searchItem, setSearchItem] = useState('');
+    const [selectedDonor, setSelectedDonor] = useState('');
+    const [name, setName] = useState('');
+    const [CNIC, setCNIC] = useState('');
+    const [phone, setPhoneNumber] = useState('');
+    const [email, setEmail] = useState('');
+    const [city, setCity] = useState('');
+    const [bloodGroup, setBloodGroup] = useState('');
+
 
     useEffect(() => {
         fetchDonors();
@@ -56,8 +64,86 @@ const UpdateUser = () => {
         window.location.href = '/admin/dashboard'
     }
 
-    const updateUser = (email) => {
+    const updateUserEnable = (donor) => {
         console.log("This is the email: " + email)
+        setSelectedDonor(donor)
+        
+    }
+
+    const handleUpdate = async (event) => {
+        event.preventDefault();
+        const token = localStorage.getItem('token')
+
+        const updatedDonor = {
+            name,
+            CNIC,
+            phone,
+            email,
+            city,
+            bloodGroup
+        }
+
+        try {
+            const response = await fetch('http://localhost:4000/admin/updateDonor', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `${token}`
+                },
+                body: JSON.stringify(updatedDonor)
+
+            })
+
+            if (response.status === 200)
+            {
+                alert("Donor updated successfully!")
+                window.location.href = '/admin/dashboard'
+            }
+
+            else
+            {
+                alert("Error occurred while updating donor")
+            }
+        }
+
+        catch (error) {
+            console.log("Error occurred while updating donor")
+            console.log(error)
+        }
+
+        setSelectedDonor('')
+ 
+    }
+
+    const deleteUser = async (email) => {
+        const token = localStorage.getItem('token')
+
+        try {
+            const response = await fetch('http://localhost:4000/admin/deleteDonor', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `${token}`
+                },
+                body: JSON.stringify({email: email})
+            })
+
+            if (response.status === 200)
+            {
+                alert("Donor deleted successfully!")
+                window.location.href = '/admin/dashboard'
+            }
+
+            else
+            {
+                alert("Error occurred while deleting donor")
+            }
+        }
+
+        catch (error) {
+            console.log("Error occurred while deleting donor")
+            console.log(error)
+        }
     }
 
 
@@ -76,7 +162,8 @@ const UpdateUser = () => {
                         <th>Email</th>
                         <th>City</th>
                         <th>Blood Group</th>
-                        <th>Action to Perform</th>
+                        <th>Action</th>
+                        <th>Action</th>
 
                     </tr>
                 </thead>
@@ -91,12 +178,28 @@ const UpdateUser = () => {
                                 <td>{donor.email}</td>
                                 <td>{donor.city}</td>
                                 <td>{donor.bloodGroup}</td>
-                                <td><button onClick={() => updateUser(donor.email)}>Update</button></td>
+                                <td><button onClick={() => updateUserEnable(donor)}>Update</button></td>
+                                <td><button onClick={() => deleteUser(donor.email)}>Delete</button></td>
                             </tr>
                         )
                     })}
                 </tbody>
             </table>
+
+            {selectedDonor && (
+                <div>
+                    <h1>Update User</h1>
+                    <form>
+                        <input type="text" placeholder="Name" value={selectedDonor.name} onChange={(event) => setName(event.target.value)} />
+                        <input type="text" placeholder="CNIC" pattern="\d{5}-\d{7}-\d" value={selectedDonor.CNIC} onChange={(event) => setCNIC(event.target.value)} />
+                        <input type="text" placeholder="Phone Number (11-Digit)" value={selectedDonor.phoneNumber} pattern="^\d{11}$" onChange={(event) => setPhoneNumber(event.target.value)} />
+                        <input type="email" placeholder="Email" value={selectedDonor.email} onChange={(event) => setEmail(event.target.value)} />
+                        <input type="text" placeholder="City" value={selectedDonor.city} onChange={(event) => setCity(event.target.value)} />
+                        <input type="text" placeholder="Blood Group" value={selectedDonor.bloodGroup} onChange={(event) => setBloodGroup(event.target.value)} />
+                        <button onClick={handleUpdate}>Update</button>
+                    </form>
+                </div>
+            )}
 
             <button onClick={handleBack}>Back</button>
         </div>

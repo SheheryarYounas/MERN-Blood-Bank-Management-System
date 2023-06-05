@@ -35,6 +35,7 @@ router.post('/login', AdminController.login)
 router.put('/updateDonor', isAuthorized, AdminController.updateDonor)
 router.delete('/deleteDonor', isAuthorized, AdminController.deleteDonor)
 router.get('/retrieveAllDonors', isAuthorized, AdminController.retrieveAllDonors)
+router.get('/verify', AdminController.verify)
 
 
 

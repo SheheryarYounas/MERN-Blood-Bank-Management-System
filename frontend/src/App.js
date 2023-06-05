@@ -7,10 +7,15 @@ import DonorSignup from './Components/SignupDonor';
 import AdminDashboard from './Components/AdminDashboard';
 import UpdateUser from './Components/UpdateUser';
 import AdminSignup from './Components/SignupAdmin';
+import NavBar from './Components/NavBar';
+import DonorLogin from './Components/LoginDonor';
+import DonorDashboard from './Components/DonorDashboard';
 
 function App() {
   return (
     <div className="App">
+
+      <NavBar />
       <Router>
         <Routes>
         <Route path="/" element={<Home />} />
@@ -19,6 +24,8 @@ function App() {
         <Route path='/admin/update' element={<UpdateUser />} />
         <Route path='/admin/dashboard' element={<AdminDashboard />} />
         <Route path='/admin/signup' element={<AdminSignup />} />
+        <Route path='/donor/login' element={<DonorLogin />} />
+        <Route path='/donor/dashboard' element={<DonorDashboard />} />
         </Routes>
       </Router>
     </div>

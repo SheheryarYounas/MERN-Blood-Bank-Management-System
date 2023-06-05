@@ -86,8 +86,35 @@ let retrieveAllDonors = (req, res) => {
     })
 }
 
+let verify = (req, res) => {
+    console.log("Verify method in Donor Controller called")
+
+    let token = req.headers.authorization
+    let secretKey = process.env.SECRET_KEY
+
+    if (!token)
+    {
+        return res.status(403).send({message: "You are not allowed to perform this action"})
+    }
+
+    console.log("The token is: ", token)
+    const decoded = jwt.verify(token, secretKey)
+    req.user = decoded
+    
+    if (req.user.role == "Donor")
+    {
+        res.status(200).send({message: "You are a Donor"})
+    }
+
+    else
+    {
+        return res.status(403).send({message: "You must be a donor to access this route"})
+    }
+}
+
 module.exports = {
     signup,
     login,
-    retrieveAllDonors
+    retrieveAllDonors,
+    verify
 }
